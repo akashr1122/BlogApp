@@ -9,6 +9,7 @@ import {
   Text,
   useBreakpointValue,
 } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
@@ -44,7 +45,7 @@ Create a unique and beautiful blog easily.
           </Heading>
           
           
-            <Button
+            <Link to={'/createpost'}><Button
               rounded={'full'}
               bg={'blue.400'}
               margin={'auto'}
@@ -55,6 +56,7 @@ Create a unique and beautiful blog easily.
               }}>
               CREATE YOUR BLOG
             </Button>
+            </Link>
            
           
         </Stack>
