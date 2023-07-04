@@ -10,11 +10,12 @@ const multer = require('multer');
 const uploadMiddleware = multer({dest:'uploads/'})
 const fs = require('fs');
 const { PostModel } = require("./Model/PostModel");
-const { default: mongoose } = require("mongoose");
+
 const app = express();
 app.use(express.json());
 app.use(cors({credentials:true,origin:'http://localhost:3000'}))
 app.use(cookieParser());
+app.use('/uploads',express.static(__dirname +'/uploads'));
 
 app.get('/', async (req, res) => {
   res.send("hello");
@@ -86,22 +87,43 @@ app.post('/createpost',uploadMiddleware.single('file'),async (req,res)=>{
   const newPath = path+'.'+ext;
   fs.renameSync(path,newPath);
    
-  const  newPost =   new PostModel  ({
+   const { token } = req.cookies;
+  jwt.verify(token, secret, async (err, info) => {
+    if (err) throw err;
+   
+     const  newPost =   new PostModel  ({
      title, 
      summery,
      content,
-     cover:newPath
-  })
-   await newPost.save();
-  res.send(newPost);
+     cover:newPath,
+     author:info.id
+  });
+      await newPost.save();
+       res.send(newPost);
+  });
+ 
+  
+  
 });
 
 
 app.get('/posts',async(req,res)=>{
 
-   const AllPost = await PostModel.find();
+   const AllPost = await PostModel.find()
+   .populate('author',['firstname','lastname'])
+   .sort({createdAt: -1})
      res.send(AllPost);
 })
+
+app.get('/postbyid/:id',async(req,res)=>{
+
+    const {id} = req.params;
+   const PostById = await PostModel.findById(id)
+   .populate('author',['firstname','lastname'])
+   .sort({createdAt: -1})
+     res.send(PostById);
+})
+
 
 app.listen(8000, async () => {
   try {

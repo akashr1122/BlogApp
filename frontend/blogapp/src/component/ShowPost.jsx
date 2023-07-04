@@ -1,14 +1,27 @@
-import React, { useEffect } from 'react'
-
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import Post from './Post';
 const ShowPost = () => {
- 
- useEffect(async()=>{
-  await axios.get('http://localhost:8000/posts')
-   .then((res)=> console.log(res.data))
-   .catch((error)=> console.log(error));
- },[])
+ const[post,setPost] = useState([]);
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/posts');
+        setPost(response.data); 
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  fetchData();
+}, []);
   return (
-    <div>ShowPost</div>
+    <div>
+        {post.length>0 && post.map(p =>( 
+          
+            <Post{...p}/>
+        ))}
+    </div>
   )
 }
 

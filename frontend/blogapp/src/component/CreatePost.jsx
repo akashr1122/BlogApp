@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { Box, FormControl, FormLabel, Input, Button, Select, Image } from "@chakra-ui/react";
 import ReactQuil from 'react-quill';
-import 'react-quill/dist/quill.snow.css'
-import axios from 'axios'
+import 'react-quill/dist/quill.snow.css';
+import axios from 'axios';
+import {Navigate} from 'react-router-dom';
 
 
     const modules = {
@@ -28,6 +29,7 @@ const CreatePost = () => {
     const[summery,setSummery] = useState('');
     const[content,setContent] = useState('');
     const[file,setFile] = useState('');
+    const[redirect,setRedirect] = useState(false);
 
 
 
@@ -63,12 +65,18 @@ const CreatePost = () => {
      data.set('file',file[0]);
     
 e.preventDefault();
-     await axios.post('http://localhost:8000/createpost', data
+     await axios.post('http://localhost:8000/createpost', data,{
+       withCredentials:true
+     }
            
      ).then(()=> alert('Created post Sucessfully'))
+      .then(() => setRedirect(true))
        .catch((err)=> alert('Something went Wrong'))
   }
-
+  
+   if(redirect){
+     return(<Navigate to={'/showpost'}/>)
+   }
   return (
    <>
    {selectedOption && (

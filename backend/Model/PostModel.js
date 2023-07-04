@@ -6,7 +6,8 @@ const PostSchema = new mongoose.Schema({
     title:String,
     summery:String,
      content:String,
-      cover:String
+      cover:String,
+      author:{type:mongoose.Schema.Types.ObjectId,ref:'users'}
 },{
     timestamps:true,
 })
