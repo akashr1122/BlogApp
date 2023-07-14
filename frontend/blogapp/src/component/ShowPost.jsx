@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Post from './Post';
+import { Box } from '@chakra-ui/react';
 const ShowPost = () => {
  const[post,setPost] = useState([]);
 useEffect(() => {
@@ -16,12 +17,14 @@ useEffect(() => {
   fetchData();
 }, []);
   return (
-    <div>
+    <Box >
         {post.length>0 && post.map(p =>( 
           
-            <Post{...p}/>
+     <Post{...p}/>
+         
+          
         ))}
-    </div>
+    </Box>
   )
 }
 

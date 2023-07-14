@@ -1,6 +1,5 @@
 import React from 'react'
-import Navbar from './Navbar'
-import RoutePage from '../AllRoute/RoutePage'
+
 import Header from './Header'
 
 
